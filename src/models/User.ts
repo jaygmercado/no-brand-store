@@ -5,9 +5,18 @@ const userSchema = new Schema({
   name: { type: String },
   image: { type: String },
   address: { type: String },
-  cart: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+  cart: [
+    {
+      productId: {
+        type: Schema.Types.ObjectId,
+        ref: "product",
+        required: true,
+      },
+      quantity: { type: Number, required: true, min: 1 },
+    },
+  ],
 });
 
-const Supplier = models["User"] || model("User", userSchema);
+const User = models["User"] || model("User", userSchema);
 
-export default Supplier;
+export default User;
