@@ -115,6 +115,7 @@ export default function Component() {
                         <button
                           type="button"
                           className="w-full"
+                          disabled={product.quantity <= 0}
                           onClick={() => addProductToCart(product._id)}
                         >
                           <ShoppingBagIcon className="h-4 w-4" />
