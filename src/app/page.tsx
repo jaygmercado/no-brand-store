@@ -1,8 +1,9 @@
 "use client";
 
-import { useSession, signIn, signOut } from "next-auth/react";
-import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { Login } from "@/components/component/login";
 import Loading from "@/components/Loading";
+import Hero from "@/components/Hero";
 
 export default function Component() {
   const { data: session, status } = useSession();
@@ -12,21 +13,16 @@ export default function Component() {
   if (session) {
     return (
       <>
-        Signed in as {session?.user?.email}
-        <br />
-        <Link href="/products">Products</Link>
-        <br />
-        <Link href="/cart">Cart</Link>
-        <br />
-        <button onClick={() => signOut()}>Sign out</button>
+        <Hero />
       </>
     );
   }
 
   return (
-    <>
-      Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
-    </>
+    <div className="flex justify-center content-center h-screen">
+      <div className="my-auto ">
+        <Login />
+      </div>
+    </div>
   );
 }

@@ -5,6 +5,8 @@ import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { Navbar } from "@/components/component/navbar";
+import Footer from "@/components/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,11 +20,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className}`}>
+      <body className={`${inter.className} `}>
         <main>
           <SessionProvider>
+            <Navbar />
             <ToastContainer />
             {children}
+            <Footer />
           </SessionProvider>
         </main>
       </body>
