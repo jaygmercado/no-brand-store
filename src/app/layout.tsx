@@ -24,7 +24,7 @@ export default function RootLayout({
         <main>
           <SessionProvider>
             <Navbar />
-            <ToastContainer />
+            <ToastContainer limit={3} />
             {children}
             <Footer />
           </SessionProvider>

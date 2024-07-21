@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, JSX, SVGProps } from "react";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { ProductType } from "@/types/Product";
@@ -34,6 +34,19 @@ export default function Component() {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
 
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+  };
+
+  const handleIncrement = () => {
+    setQuantity(quantity + 1);
+  };
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
   const addProductToCart = useCallback(async () => {
     try {
       await fetch(`/api/users/${session?.user?.email}/cart`, {
@@ -46,6 +59,7 @@ export default function Component() {
           quantity,
         }),
       });
+      setQuantity(1);
       notify("Success", `Product added to cart`);
     } catch (error) {
       notify("Error", `Cannot load products`);
@@ -62,6 +76,15 @@ export default function Component() {
   if (status === "loading") return <Loading />;
 
   if (session) {
+    const isOutOfStock = product?.quantity === 0;
+    const isQuantityInvalid =
+      quantity < 1 || quantity > (product?.quantity || 0);
+    const buttonText = isOutOfStock
+      ? "Out of Stock"
+      : isQuantityInvalid
+      ? "Enter a valid quantity"
+      : "Add To Cart";
+    const isButtonDisabled = isOutOfStock || isQuantityInvalid;
     return (
       <>
         {/* Breadcrumb */}
@@ -131,34 +154,55 @@ export default function Component() {
                   <p>{product?.description}</p>
                 </div>
                 <div className="text-4xl font-bold">PHP{product?.price}.00</div>
+                <p className="text-sm text-zinc-500">
+                  Stock: {product?.quantity}
+                </p>
               </div>
-              <form className="grid gap-4 md:gap-10">
+              <form className="grid gap-4 md:gap-10" onSubmit={handleSubmit}>
                 <div className="grid gap-2">
                   <Label htmlFor="quantity" className="text-base">
                     Quantity
                   </Label>
-                  <Input
-                    type="number"
-                    id="quantity"
-                    defaultValue="1"
-                    className="w-16 text-center"
-                    max={product?.quantity}
-                    min={1}
-                    value={quantity}
-                    onChange={(e) => setQuantity(+e.target.value)}
-                  />
+
+                  <div className="flex items-center gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="w-8 h-8"
+                      onClick={handleDecrement}
+                    >
+                      <MinusIcon className="w-4 h-4" />
+                    </Button>
+                    <Input
+                      type="number"
+                      id="quantity"
+                      defaultValue="1"
+                      className="w-16 text-center"
+                      max={product?.quantity}
+                      min={1}
+                      value={quantity}
+                      onChange={(e) => setQuantity(+e.target.value)}
+                      readOnly={true}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="w-8 h-8"
+                      onClick={handleIncrement}
+                    >
+                      <PlusIcon className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
                 <Button
                   type="button"
                   onClick={() => addProductToCart()}
-                  disabled={
-                    quantity > (product?.quantity || 0) || quantity <= 0
-                  }
+                  disabled={isButtonDisabled}
                   size="lg"
                 >
-                  {quantity <= 0 || quantity > (product?.quantity || 0)
-                    ? "Out of Stock"
-                    : "Add To Cart"}
+                  {buttonText}
                 </Button>
               </form>
             </div>
@@ -174,5 +218,44 @@ export default function Component() {
         <Login />
       </div>
     </div>
+  );
+}
+
+function MinusIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 12h14" />
+    </svg>
+  );
+}
+
+function PlusIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 12h14" />
+      <path d="M12 5v14" />
+    </svg>
   );
 }
