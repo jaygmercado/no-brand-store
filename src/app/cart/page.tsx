@@ -38,12 +38,12 @@ export default function Component() {
   const [isPurchaseSuccessful, setIsPurchaseSuccessful] = useState(false);
 
   const calculateTotal = useCallback(() => {
-    const newTotal = cart.reduce(
+    const newTotal = items.reduce(
       (acc, item: any) => acc + Number(item.quantity) * item.productInfo.price,
       0
     );
     setTotal(newTotal);
-  }, [cart]);
+  }, [items]);
 
   const removeItemFromCart = useCallback(
     async (productId: string) => {
@@ -58,6 +58,9 @@ export default function Component() {
           }),
         });
         setCart((state) =>
+          state.filter((item) => item.productId !== productId)
+        );
+        setItems((state) =>
           state.filter((item) => item.productId !== productId)
         );
         notify("Success", `Product removed from cart`);
@@ -83,6 +86,14 @@ export default function Component() {
           }),
         });
         setCart((state) => {
+          return state.map((item) => {
+            if (item.productId === productId) {
+              item.quantity = +newQuantity;
+            }
+            return item;
+          });
+        });
+        setItems((state) => {
           return state.map((item) => {
             if (item.productId === productId) {
               item.quantity = +newQuantity;
@@ -130,7 +141,7 @@ export default function Component() {
 
   useEffect(() => {
     calculateTotal();
-  }, [cart, calculateTotal]);
+  }, [calculateTotal]);
 
   if (status === "loading") return <Loading />;
 
@@ -268,7 +279,9 @@ export default function Component() {
                                   <span className="text-muted-foreground">
                                     Shipping
                                   </span>
-                                  <span>₱250.00</span>
+                                  <span>
+                                    {total === 0 ? "₱0.00" : "₱250.00"}
+                                  </span>
                                 </div>
                                 <Separator />
                                 <div className="flex items-center justify-between font-medium">
