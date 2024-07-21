@@ -8,7 +8,6 @@ import Loading from "@/components/Loading";
 import notify from "@/utils/notify";
 import { JSX, SVGProps } from "react";
 import { Login } from "@/components/component/login";
-import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,7 +15,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-
+import Image from "next/image";
 import SkeletonLoader from "@/components/SkeletonLoader";
 
 const loadProducts = async () => {
@@ -94,8 +93,8 @@ export default function Component() {
                     className="rounded bg-card transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:border"
                   >
                     <Link href={`/products/${product._id}`} prefetch={false}>
-                      <img
-                        src={product.image}
+                      <Image
+                        src={product.image || ""}
                         alt={product.name}
                         width={400}
                         height={400}

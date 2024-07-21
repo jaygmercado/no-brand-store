@@ -17,6 +17,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Login } from "@/components/component/login";
 import Loading from "@/components/Loading";
+import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
 
 const loadProduct = async (id: string) => {
   const res = await fetch(`/api/products/${id}`);
@@ -82,7 +84,28 @@ export default function Component() {
         </div>
         {/* EndBreadcrumb */}
         {loading ? (
-          <Loading />
+          <>
+            <div className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
+              <div className="grid gap-4 md:gap-8">
+                <div className="grid gap-4">
+                  <Skeleton className="h-[500px] w-full" />
+                </div>
+              </div>
+              <div className="grid gap-4 md:gap-10 items-start">
+                <div className="grid gap-4">
+                  <div className="font-bold text-3xl lg:text-4xl">
+                    <Skeleton className="h-[50px] w-[300px]" />
+                  </div>
+                  <div>
+                    <Skeleton className="h-4 w-[400px]" />
+                  </div>
+                  <div className="text-4xl font-bold">
+                    <Skeleton className="h-10 w-[100px]" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
         ) : (
           <div
             className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6"
@@ -90,8 +113,8 @@ export default function Component() {
           >
             <div className="grid gap-4 md:gap-8">
               <div className="grid gap-4">
-                <img
-                  src={product?.image}
+                <Image
+                  src={product?.image || ""}
                   alt="Product Image"
                   width={600}
                   height={600}
@@ -139,52 +162,6 @@ export default function Component() {
             </div>
           </div>
         )}
-        {/* <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Price</th>
-              <th>Quantity</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr key={product?._id}>
-              <td>{product?.name}</td>
-              <td>{product?.description}</td>
-              <td>{product?.price}</td>
-              <td>{product?.quantity}</td>
-            </tr>
-          </tbody>
-        </table>
-        <form>
-          quantity:
-          <input
-            type="number"
-            name="quantity"
-            id="quantity"
-            max={product?.quantity}
-            min={1}
-            value={quantity}
-            onChange={(e) => setQuantity(+e.target.value)}
-          />
-          <button
-            type="button"
-            onClick={() => addProductToCart()}
-            disabled={quantity > (product?.quantity || 0) || quantity <= 0}
-          >
-            Add to cart
-          </button>
-        </form>
-        <br />
-        <Link href="/">Home</Link>
-        <br />
-        <Link href="/products">Products</Link>
-        <br />
-        <Link href="/cart">Cart</Link>
-        <br />
-        Signed in as {session?.user?.email} <br />
-        <button onClick={() => signOut()}>Sign out</button> */}
       </>
     );
   }

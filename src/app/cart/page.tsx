@@ -1,20 +1,14 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Loading from "@/components/Loading";
 import { CartItem } from "@/types/User";
 import notify from "@/utils/notify";
 
 import { Login } from "@/components/component/login";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { JSX, SVGProps } from "react";
 import { Label } from "@/components/ui/label";
@@ -28,7 +22,6 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
-import { Loader2 } from "lucide-react";
 
 const loadCart = async (email: string) => {
   if (!email) return [];
@@ -152,7 +145,7 @@ export default function Component() {
                 onOpenChange={(open) => setIsPurchaseSuccessful(open)}
               >
                 {cart.length === 0 ? (
-                  <div className="col">
+                  <div className="col h-screen">
                     <h1 className="font-bold text-4xl mb-2">
                       Your Bag is Empty
                     </h1>
