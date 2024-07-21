@@ -156,7 +156,9 @@ export default function Component() {
                   }
                   size="lg"
                 >
-                  Add to cart
+                  {quantity <= 0 || quantity > (product?.quantity || 0)
+                    ? "Out of Stock"
+                    : "Add To Cart"}
                 </Button>
               </form>
             </div>
