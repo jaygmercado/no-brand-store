@@ -8,7 +8,6 @@ import Loading from "@/components/Loading";
 import notify from "@/utils/notify";
 import { JSX, SVGProps } from "react";
 import { Login } from "@/components/component/login";
-import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,7 +15,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-
+import Image from "next/image";
 import SkeletonLoader from "@/components/SkeletonLoader";
 
 const loadProducts = async () => {
@@ -94,12 +93,14 @@ export default function Component() {
                     className="rounded bg-card transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:border"
                   >
                     <Link href={`/products/${product._id}`} prefetch={false}>
-                      <img
-                        src={product.image}
+                      <Image
+                        src={product.image || ""}
                         alt={product.name}
                         width={400}
                         height={400}
-                        className="h-96 w-full object-cover rounded-t"
+                        className={`h-96 w-full object-cover rounded-t ${
+                          product.quantity <= 0 ? "opacity-50" : ""
+                        }`}
                       />
                     </Link>
                     <div className="p-4 flex justify-between items-center">
@@ -118,7 +119,15 @@ export default function Component() {
                           disabled={product.quantity <= 0}
                           onClick={() => addProductToCart(product._id)}
                         >
-                          <ShoppingBagIcon className="h-4 w-4" />
+                          {product.quantity <= 0 ? (
+                            <>
+                              <ShoppingBagDisabled className="h-4 w-4" />
+                            </>
+                          ) : (
+                            <>
+                              <ShoppingBagIcon className="h-4 w-4" />
+                            </>
+                          )}
                           <span className="sr-only">Add to cart</span>
                         </button>
                       </div>
@@ -157,6 +166,29 @@ function ShoppingBagIcon(
       stroke-linecap="round"
       stroke-linejoin="round"
       className="lucide lucide-shopping-bag text-zinc-600 hover:text-zinc-900"
+    >
+      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+      <path d="M3 6h18" />
+      <path d="M16 10a4 4 0 0 1-8 0" />
+    </svg>
+  );
+}
+
+function ShoppingBagDisabled(
+  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
+) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      className="lucide lucide-shopping-bag text-zinc-300"
     >
       <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
       <path d="M3 6h18" />
