@@ -3,7 +3,6 @@ import { useSession } from "next-auth/react";
 import { Login } from "@/components/component/login";
 import Loading from "@/components/Loading";
 import Hero from "@/components/Hero";
-import Collection from "@/components/Collection";
 
 import Image from "next/image";
 
@@ -20,7 +19,6 @@ export default function Component() {
           <h1 className="text-center font-bold text-4xl py-16 tracking-tight">
             Featured.
           </h1>
-          <Collection />
         </section>
 
         <section className="container w-full pt-12 md:pt-24 lg:pt-32">
