@@ -111,6 +111,9 @@ export default function Component() {
                         <p className="text-zinc-500 text-sm">
                           PHP{product.price.toFixed(2)}
                         </p>
+                        <p className="text-xs text-zinc-500">
+                          Stock: {product.quantity}
+                        </p>
                       </div>
                       <div>
                         <button

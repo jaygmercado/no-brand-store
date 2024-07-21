@@ -59,6 +59,7 @@ export default function Component() {
           quantity,
         }),
       });
+      setQuantity(1);
       notify("Success", `Product added to cart`);
     } catch (error) {
       notify("Error", `Cannot load products`);
@@ -153,6 +154,9 @@ export default function Component() {
                   <p>{product?.description}</p>
                 </div>
                 <div className="text-4xl font-bold">PHP{product?.price}.00</div>
+                <p className="text-sm text-zinc-500">
+                  Stock: {product?.quantity}
+                </p>
               </div>
               <form className="grid gap-4 md:gap-10" onSubmit={handleSubmit}>
                 <div className="grid gap-2">
