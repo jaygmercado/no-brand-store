@@ -286,7 +286,12 @@ export default function Component() {
                                 <Separator />
                                 <div className="flex items-center justify-between font-medium">
                                   <span>Total</span>
-                                  <span>₱{total.toFixed(2)}</span>
+                                  <span>
+                                    ₱
+                                    {total === 0
+                                      ? "0.00"
+                                      : (total + 250.0).toFixed(2)}
+                                  </span>
                                 </div>
                               </div>
                             </div>
